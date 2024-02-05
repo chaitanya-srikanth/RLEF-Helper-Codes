@@ -1,13 +1,1 @@
-{
-  "type": "service_account",
-  "project_id": "faceopen-techolution",
-  "private_key_id": "479bad5685ec1905a63f79f6add086214e58187e",
-  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCNIsGAm/T1aDy5\nGHgZBnqIT02msfcOcr9b2q5pzpOj5HccBreaZRMN252BAzZSMI8mkammtLJ9Pbvz\nNCbeVkSmLmCagSvokUjRAgyX2WOwNlKBNCs9GLMCFSH/UZX4DLsBI/GACs3i2Vy/\nJXmRb+ThlRPY7gyjtHOQiWaObA8v+A6+axr2yLAbUuGaevTfAB4DEBeLJ9zEytGP\ni3+x4R3O2VolEadJAn/6N22O6NP9X/ER3L2EoRxbLW3SByB831wBn74l0183QCjt\nqIjyJ1U07+JDte24fF/1jBm0hSOCZ43W25V9HVY4CRdqraDJdKkFIADOguObtgYe\nh9LfvU2vAgMBAAECggEAAX6auffs0iR2cCdYLjupVIQyeE9uJFMGv7xDGI+9dIDY\n2g0gKJxlZUIsGs+j5Z7qBSiJuWA0e6sJsHue5b/YHkJjd39iraXMNZpl872zlowc\nt42L36vBSYZbw85jXisUV+C/j/GNWJegqc2Fygp7TAA+I4/xxlIE30T1NxDh4Eom\nJxfEgGdKYAecY2pbdTkPKA8qIsiW8WdIR3E/3bo72ulRebkw4Kg7N6fGiTI5IHFD\nz6tz5QubMsb+TyDSBbfIHXQkWV2EpE65H9HROPTmPItCvGd39J0wPY8ZkegrM5Tq\nwIY6afnw+ml/JxlC51RLsRvM2hAn0awv2WWxyRcEIQKBgQDBJ/HC+QRBNncCPgzq\n+9+HIBU1y+UTLfHlkraRONSxVEPldxmFDH7o1ECHxWyS7OFpMGiWmOw0hD+gkqNp\nt1fuoix4vSwQC7HFpStTVB22yxDWl0Frw0aiuvRhyjO3QevrciJ9iqfacxeLl/JW\ntmmPSYMvIYhzcqMGpBHa3FF2SQKBgQC7DgTtsR4m2FJ/Ex4KCsZxliKmAiDzpMgS\nFVn7ZFrHiaTOTRPyVqn/825Xx7rYDt/SDIPONO2fZftrFOvGENod+kiN4+g6k9BB\n4lT8hmJyWpBfKcwq32Sj3p3xFq34hE/73hcuARU5PcJ9lhVLVP+oVrpX/zwkPEDq\nPKhv+kXENwKBgGHqI84YeaWtPGrwlY/RGqDfDKF2uKseUU91LgMz8e3qr3h1BYTC\nrtrMLeIlnEJmvmWaWops/uAoYjC95QTEIlkf8LdL/jgsFXQBpJLbQyzUh7agelNs\nbDQ13Yhs/gZZ7oQuGXnWffxo93iWEA0Q7zXpqAyOTSNo62eEaGCv6sOxAoGBAJaL\n//d117iX3j2cG08lwPVmSlil2fN+KfAz8wnbiRyTcWsAqg8fJQ900tgfTgfaYNVj\ncSmje6QQpjtWyTPOGF6MM5zPUvbiRHjiOlhLqCw1K4EL2OCgjxU8dI23HSmpA97I\nros+H+DEDiaZhmXs8R6BPtTX/YWEYRKk40PMgB4dAoGBAKahfTohMSeol51yH3iz\nLTe6u1bSNX32SKz6tzy08dGJdWj1HAYpQ4IqLzhui1ysvyG3gujgYAAEhPrKjbmw\nqWRIPyecVFRb81HX2sIbv9pOz2GLRVu1C/p75E20WF0lNDofB47F/uoUWgi8/K+x\nnwXRuMyD+I31IY5hvs8V5syA\n-----END PRIVATE KEY-----\n",
-  "client_email": "avantor-training-pod@faceopen-techolution.iam.gserviceaccount.com",
-  "client_id": "113113030543659288832",
-  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-  "token_uri": "https://oauth2.googleapis.com/token",
-  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/avantor-training-pod%40faceopen-techolution.iam.gserviceaccount.com",
-  "universe_domain": "googleapis.com"
-}
+
