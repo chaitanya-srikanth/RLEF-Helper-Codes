@@ -1,0 +1,5 @@
+flask
+colorama
+ultralytics
+google-cloud-storage
+halo
