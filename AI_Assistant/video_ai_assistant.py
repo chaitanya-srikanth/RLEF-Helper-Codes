@@ -151,6 +151,9 @@ def home():
     return "AI-Assistant server is available"
 
 
+
+
+
 @app.route('/aihelp', methods=["POST"])
 def make_prediction():
     try:

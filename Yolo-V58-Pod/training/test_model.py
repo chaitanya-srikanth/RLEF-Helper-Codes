@@ -276,10 +276,12 @@ def main(test_csv_path, test_json_path, dataset_path, models_path, output_file, 
         predicted_boxes = []
         predicted_labels = []
         confidence_scores = []
+        masks = []
 
         for result in results:
             predicted_boxes.extend(result.boxes.xyxy.tolist())
             confidence_scores.extend(result.boxes.conf.tolist())
+            masks.extend(result.masks.data.tolist())
 
             for label in result.boxes.cls.tolist():
                 if single_cls:

@@ -17,7 +17,7 @@ from threading import Thread
 import pandas as pd
 
 MAX_THREADS = 100
-
+# 65dca777daed8358d2482b6a
 
 # path to Weird format
 def pointPath_To_WeirdAutoaiAnnotationFormat(bboxes, labels):
@@ -136,12 +136,7 @@ if __name__ == '__main__':
         tag = 'onm'
         label = 'plane_corrected_image'
         img_count = 0
-
-
         
-        
-
-   
         threads.append(Thread(target = send_to_rlef, args = (img_path, model_id, tag, label,annotation )))
         
         if idx % MAX_THREADS==0:
@@ -158,3 +153,11 @@ if __name__ == '__main__':
         img_count+=1
    
         
+    if len(threads) > 0:
+        for th in threads:
+            th.start() 
+        for th in threads:
+            th.join() 
+        threads = []
+
+    print('Data Upload Done')
