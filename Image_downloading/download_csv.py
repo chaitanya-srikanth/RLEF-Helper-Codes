@@ -15,7 +15,8 @@ MAX_NUMBER_THREADS = 100
 
 def download_blob(output_file_path, blob_path, value):
     # filename = f"{(os.path.basename(blob_path)).split('.')[0]}.jpg"
-    output_file_path = os.path.join(output_file_path, os.path.basename(value))
+    # output_file_path = os.path.join(output_file_path, os.path.basename(value)) #LINUX SYSTEM
+    output_file_path = f"{output_file_path}/{os.path.basename(value)}"
     blob = bucket.blob('/'.join(blob_path.split('/')[3:]))
     blob.download_to_filename(output_file_path)
 
@@ -69,8 +70,10 @@ def send_to_rlef(img_path, annotation, model_id, tag, confidence_score=100, labe
     print('code: ', response.status_code)
 
 
-input_csv_path='dataSetCollection_Sigma_Set_resources.csv'
-output_folder_path='ponm_text_detection'
+input_csv_path='dataSetCollection_rack-images_resources.csv'
+output_folder_path='dis-training-images'
+if os.path.exists(output_folder_path) is False:
+    os.mkdir(output_folder_path)
 download_files(input_csv_path, output_folder_path)
 
 
