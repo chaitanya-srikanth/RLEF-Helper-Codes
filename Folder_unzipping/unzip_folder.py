@@ -21,8 +21,8 @@ def unzip_folder(zip_path, extract_to):
         print(f'An error occurred: {e}')
 
 # Example usage
-zip_path = 'DIS5k.zip'
-extract_to = 'DIS-Dataset'
+zip_path = 'DUTS-TR.zip'
+extract_to = 'DUTS-Dataset'
 
 os.makedirs(extract_to, exist_ok=True)
 unzip_folder(zip_path, extract_to)

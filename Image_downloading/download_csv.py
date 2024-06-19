@@ -70,8 +70,8 @@ def send_to_rlef(img_path, annotation, model_id, tag, confidence_score=100, labe
     print('code: ', response.status_code)
 
 
-input_csv_path='dataSetCollection_rack-images_resources.csv'
-output_folder_path='dis-training-images'
+input_csv_path='dataSetCollection_training-20-classes_resources.csv'
+output_folder_path='training-images'
 if os.path.exists(output_folder_path) is False:
     os.mkdir(output_folder_path)
 download_files(input_csv_path, output_folder_path)

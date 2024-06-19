@@ -34,8 +34,7 @@ def pointPath_To_WeirdAutoaiAnnotationFormat(bboxes, labels):
                 annotString += f"[{str(int(x))}, {str(int(y))}], "
             
             annotString += f"[{str(int(mask[-1][0]))}, {str(int(mask[-1][1]))}]]"
-            if label.startswith('q') == True:
-                label = 'Qrcode'
+
             li[annotString] = label
 
         # print(li)
@@ -84,7 +83,7 @@ def json_creater(inputs, closed):
     return json.dumps(data)
 
 
-def send_to_rlef(img_path, model_id, tag,label, annotation, confidence_score=100, prediction='predicted'):
+def send_to_rlef(img_path, model_id, tag,label, annotation = None, confidence_score=100, prediction='predicted'):
     print("Sending")
     url = "https://autoai-backend-exjsxe2nda-uc.a.run.app/resource"
     
@@ -109,7 +108,7 @@ def send_to_rlef(img_path, model_id, tag,label, annotation, confidence_score=100
 
 if __name__ == '__main__':
 
-    image_dir = 'ponm_text_detection'
+    image_dir = 'dis-training-images'
 
     img_list = os.listdir(image_dir)
 
@@ -123,21 +122,21 @@ if __name__ == '__main__':
     threads = []
 
     flag = False
-    df = pd.read_csv('dataSetCollection_Sigma_Set_resources.csv')
+    # df = pd.read_csv('dataSetCollection_Sigma_Set_resources.csv')
 
     for idx, img_path in enumerate(img_list):
         # print(img_path, label_path)
         # img_path = os.path.join(image_dir, img_path)
-        
+        img_path = f"{image_dir}/{img_path}"
 
         ################ REMEMBER TO CHANGE THE MODEL ID ##################
         
-        model_id = '6565b30a8ac019ca9eec77b7'
-        tag = 'onm'
-        label = 'plane_corrected_image'
+        model_id = '666ade1e38b32dfe3b13e213'
+        tag = 'rack-image'
+        label = 'bg-removal'
         img_count = 0
         
-        threads.append(Thread(target = send_to_rlef, args = (img_path, model_id, tag, label,annotation )))
+        threads.append(Thread(target = send_to_rlef, args = (img_path, model_id, tag, label )))
         
         if idx % MAX_THREADS==0:
 
