@@ -12,9 +12,7 @@ import threading
 MAX_THREADS = 100
 
 
-names = ['aloo', 'bardex', 'baylis', 'brown-wawa', 'cyan-wawa', 'darkgreen-wawa', 'guidezilla', 'meritmak', 'phone-box', 'pilot', 'soya-chip', 'soya-stick', 'tape', 'wawa-darkblue', 'wawa-gray', 'wawa-red', 'white-wawa']
-
-
+names = ["arducam", "baylis", "black-box", "wawa-orange", "wawa-violet", "wawa-yellow"]
 
 def pointPath_To_WeirdAutoaiAnnotationFormat(bboxes, label):
     li = {}
@@ -114,12 +112,15 @@ for idx, path in enumerate(image_list):
         lines = file.readlines()
 
     # Print the contents of the file
+
+
     all_annotations = []
     for line in lines:
         annotation_list = line.strip().split(' ') # strip() removes any leading/trailing whitespace and newline characters
         all_annotations.append(annotation_list)
 
-        
+    if len(all_annotations) == 0:
+        continue
     # image_path = "6634d1e0a57229af76b87086\\images\\1a2ad332-093e-11ef-aa7c-42010a800043.jpg"
 
 
@@ -129,7 +130,6 @@ for idx, path in enumerate(image_list):
     classes = []
     for annotation in all_annotations:
         h,w,c = image.shape
-
         clss = annotation[0]
         points_float = annotation[1:]
         points_float = [float(x) for x in points_float]
@@ -140,10 +140,13 @@ for idx, path in enumerate(image_list):
         classes.append(clss)
         # print('###########################')
    
-
+    # print(classes)
     rlef_format = pointPath_To_WeirdAutoaiAnnotationFormat(bounding_boxes, classes)
+    # print(names[int(classes[0])])
+    # send_to_rlef(image_path, "6683b6359bae354d53f5bc0e", "rf-aug", "dummy", rlef_format)
+    # break
  
-    thread = threading.Thread(target = send_to_rlef, args = (image_path,"6672b1f8c40add48a32c24c2","rf-aug",names[int(classes[0])],rlef_format,))
+    thread = threading.Thread(target = send_to_rlef, args = (image_path,"6683b6359bae354d53f5bc0e","rf-aug",names[int(classes[0])],rlef_format,))
 
     threads.append(thread)
 

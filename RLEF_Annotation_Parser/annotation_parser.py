@@ -23,16 +23,16 @@ def find_left_upper_right_down(points):
 
 
 
-# def pointPath_To_WeirdAutoaiAnnotationFormat(bboxes, label):
-#     li = {}
-#     # obj = "label"
-#     for bbox, lbl in zip(bboxes,label):
-#         xmin, ymin, xmax, ymax = bbox[0], bbox[1], bbox[2], bbox[3]
+def pointPath_To_WeirdAutoaiAnnotationFormat(bboxes, label):
+    li = {}
+    # obj = "label"
+    for bbox, lbl in zip(bboxes,label):
+        xmin, ymin, xmax, ymax = bbox[0], bbox[1], bbox[2], bbox[3]
 
-#         li[f"[[{xmin}, {ymin}], [{xmin}, {ymax}], [{xmax}, {ymax}], [{xmax}, {ymin}]]"] = lbl   ## CHANGE IT LATER ACCORDINGLY
+        li[f"[[{xmin}, {ymin}], [{xmin}, {ymax}], [{xmax}, {ymax}], [{xmax}, {ymin}]]"] = lbl   ## CHANGE IT LATER ACCORDINGLY
 
-#     rlef_format = json_creater(li, True)
-#     return rlef_format
+    rlef_format = json_creater(li, True)
+    return rlef_format
 
 
 def multipointPath_To_WeirdAutoaiAnnotationFormat(annotations, label):
@@ -108,8 +108,8 @@ def send_to_rlef(img_path, model_id, tag,label, annotation = None, confidence_sc
     print('code: ', response.status_code)
     
 
-df = pd.read_csv('dataSetCollection_training-20-classes_resources.csv')
-annotation_path = 'annotations'
+df = pd.read_csv('dataSetCollection_training-set_resources.csv')
+# annotation_path = 'annotations'
 
 
 
@@ -122,18 +122,19 @@ for idx in range(len(df)):
         filename = filenames[1]
 
     json_path = filename.replace('.png', '.json')
-    ann_file_path = os.path.join(annotation_path, json_path)
+    # ann_file_path = os.path.join(annotation_path, json_path)
 
     try:
         dictionary = json.loads(df['imageAnnotations'][idx])
     except:
         try:
-            os.remove(f'images/{filename}')
+            os.remove(f'text-localization/{filename}')
         except:
             print(filename)
 
     final_annotations = []
     final_class = []
+
     for idx, entry in enumerate(dictionary):
         vertex_list = []
         clss_value = entry['selectedOptions'][1]['value']
@@ -142,46 +143,51 @@ for idx in range(len(df)):
             vertex_list.append([point['x'], point['y']])
         left, right = find_left_upper_right_down(vertex_list)
         final_annotations.append([left[0], left[1], right[0], right[1]])
-        # final_annotations.append(vertex_list)
         final_class.append(clss_value)
+    
+    print(final_class)
+    print(final_annotations)
+    break 
 
- 
+
+    rlef_format = pointPath_To_WeirdAutoaiAnnotationFormat(final_annotations, final_class)
+    thread = threading.Thread(target = send_to_rlef, args =(f"text-localization/{filename}", "661d03fa20cc192af059e8d1","training-image", "training-set",rlef_format,))
 
     ### CUSTOMIZE FROM HERE ###
-    try:
-        if final_class[0] == final_class[1] == 'baylis':
-            # continue
-            rlef_format = pointPath_To_WeirdAutoaiAnnotationFormat(final_annotations, final_class)
-            thread = threading.Thread(target = send_to_rlef, args =(f"training-images/{filename}", "661d03fa20cc192af059e8d1","training-image", "training-set",rlef_format,))
-            threads.append(thread)
-        else:
-            rm_index = None 
-            for idx,clss in enumerate(final_class):
-                if clss == 'baylis':
-                    rm_index = idx 
+    # try:
+    #     if final_class[0] == final_class[1] == 'baylis':
+    #         # continue
+    #         rlef_format = pointPath_To_WeirdAutoaiAnnotationFormat(final_annotations, final_class)
+    #         thread = threading.Thread(target = send_to_rlef, args =(f"text-localization/{filename}", "661d03fa20cc192af059e8d1","training-image", "training-set",rlef_format,))
+    #         threads.append(thread)
+    #     else:
+    #         rm_index = None 
+    #         for idx,clss in enumerate(final_class):
+    #             if clss == 'baylis':
+    #                 rm_index = idx 
 
-            final_class.pop(rm_index)
-            final_annotations.pop(rm_index)
-            rlef_format = pointPath_To_WeirdAutoaiAnnotationFormat(final_annotations, final_class)
-            thread = threading.Thread(target = send_to_rlef, args =(f"training-images/{filename}", "661d03fa20cc192af059e8d1","training-image", "training-set",rlef_format,))
-            threads.append(thread)
-        if len(threads) > 20:
-            for th in threads:
-                th.start()
-            for th in threads:
-                th.join()
-            threads = []
+    #         final_class.pop(rm_index)
+    #         final_annotations.pop(rm_index)
+    #         rlef_format = pointPath_To_WeirdAutoaiAnnotationFormat(final_annotations, final_class)
+    #         thread = threading.Thread(target = send_to_rlef, args =(f"text-localization/{filename}", "661d03fa20cc192af059e8d1","training-image", "training-set",rlef_format,))
+    #         threads.append(thread)
+    #     if len(threads) > 20:
+    #         for th in threads:
+    #             th.start()
+    #         for th in threads:
+    #             th.join()
+    #         threads = []
             
             
 
-    except Exception as e:
-        continue
+    # except Exception as e:
+    #     continue
 
     
-if len(threads) > 0:
-    for th in threads:
-        th.start()
-    for th in threads:
-        th.join()
+# if len(threads) > 0:
+#     for th in threads:
+#         th.start()
+#     for th in threads:
+#         th.join()
 
-    threads = []
+#     threads = []
