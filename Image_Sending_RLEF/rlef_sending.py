@@ -108,7 +108,7 @@ def send_to_rlef(img_path, model_id, tag,label, annotation = None, confidence_sc
 
 if __name__ == '__main__':
 
-    image_dir = 'dis-training-images'
+    image_dir = 'text-seg-images'
 
     img_list = os.listdir(image_dir)
 
@@ -131,9 +131,9 @@ if __name__ == '__main__':
 
         ################ REMEMBER TO CHANGE THE MODEL ID ##################
         
-        model_id = '666ade1e38b32dfe3b13e213'
-        tag = 'rack-image'
-        label = 'bg-removal'
+        model_id = '6685900f97eae5e91291d0f4'
+        tag = 'new-rack-india'
+        label = 'object'
         img_count = 0
         
         threads.append(Thread(target = send_to_rlef, args = (img_path, model_id, tag, label )))
