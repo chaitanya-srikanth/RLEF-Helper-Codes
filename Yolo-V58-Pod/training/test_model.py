@@ -215,7 +215,7 @@ def main(test_csv_path, test_json_path, dataset_path, models_path, output_file, 
     integrity_statistics = {}
 
     # Load the Yolo Model
-    model = YOLO(models_path)
+    model = YOLO(models_path) ## load RT-DETR model path 
 
     # Load the JSON file generated during training and testing
     # This contains all the details
@@ -272,7 +272,7 @@ def main(test_csv_path, test_json_path, dataset_path, models_path, output_file, 
                 ground_truth_labels[i] = 'obj'
 
         # Run inference on the model and store the results
-        results = model(file_path)
+        results = model(file_path) ## RT-DETR inference model inference 
         predicted_boxes = []
         predicted_labels = []
         confidence_scores = []

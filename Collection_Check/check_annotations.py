@@ -5,7 +5,7 @@ from collections import Counter
 
 
 
-df = pd.read_csv('dataSetCollection_Sigma_Set_resources.csv')
+df = pd.read_csv('dataSetCollection_testing-dataset-alpha_resources.csv')
 
 all_list = []
 
@@ -29,6 +29,9 @@ for index in range(len(df)):
             continue 
 
 # print(all_list)
+
+print(len(set(df['name'])))
+print(len(df))
 # 
 print(Counter(all_list))
     

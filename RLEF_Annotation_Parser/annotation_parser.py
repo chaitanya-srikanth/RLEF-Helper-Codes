@@ -4,6 +4,12 @@ import json
 import requests 
 import random 
 import threading 
+import cv2 
+
+from resize_annotations import resize_polygon_annotations
+import uuid 
+
+
 
 def find_left_upper_right_down(points):
     if not points:
@@ -18,9 +24,23 @@ def find_left_upper_right_down(points):
 
 
 
+MODEL_ID = "66efcedb79694c9cc31e3973"
+FOLDER_NAME = 'text-seg-images'
+MAX_THREAD = 40
+df = pd.read_csv('dataSetCollection_testing-dataset-alpha_resources.csv')
+# annotation_path = 'annotations'
 
 
-
+# class_map = {
+#     'barcode' : 'barcode', 
+#     'ProductName' : 'product_name', 
+#     'LotNo' : 'lot_no', 
+#     'RefNo' : 'ref_no', 
+#     'use_by' : 'use_by', 
+#     'Qrcode' : 'delete', 
+#     'mfg_date' : 'delete', 
+#     'BarcodeNo' : 'delete'
+# }
 
 
 def pointPath_To_WeirdAutoaiAnnotationFormat(bboxes, label):
@@ -44,6 +64,15 @@ def multipointPath_To_WeirdAutoaiAnnotationFormat(annotations, label):
     rlef_format = json_creater(li, True)
 
     return rlef_format
+
+def segmentation_annotation_rlef(segments, label):
+    li = {}
+
+    for idx, segment in enumerate(segments):
+        li[str(segment)] = label[idx]
+    rlef_format = json_creater(li,True)
+    return rlef_format
+
 
 # Json creater function for annotation of RLEF.ai
 def json_creater(inputs, closed):
@@ -101,93 +130,97 @@ def send_to_rlef(img_path, model_id, tag,label, annotation = None, confidence_sc
         'confidence_score': confidence_score,
         'imageAnnotations': str(annotation)
     }
-    files = [('resource', (f'{img_path}', open((img_path), 'rb'), 'image/png'))]
+    files = [('resource', (f'{img_path}', open((os.path.join(FOLDER_NAME, img_path)), 'rb'), 'image/png'))]
     headers = {}
     response = requests.request("POST", url, headers=headers, data=payload, files=files)
     # print(response.text)
     print('code: ', response.status_code)
-    
 
-df = pd.read_csv('dataSetCollection_training-set_resources.csv')
-# annotation_path = 'annotations'
-
-
+count = 0
 
 threads = []
 for idx in range(len(df)):
-    filenames = df['name'][idx].split('\\')
-    if len(filenames) == 1:
-        filename = filenames[0]
-    else:
-        filename = filenames[1]
-
-    json_path = filename.replace('.png', '.json')
-    # ann_file_path = os.path.join(annotation_path, json_path)
-
     try:
-        dictionary = json.loads(df['imageAnnotations'][idx])
-    except:
+        filenames = df['name'][idx].split('\\')
+        if len(filenames) == 1:
+            filename = filenames[0]
+        else:
+            filename = filenames[1]
+
+        json_path = filename.replace('.png', '.json')
+        tag = df['tag'][idx]
+        label = df['label'][idx]
+        # ann_file_path = os.path.join(annotation_path, json_path)
+
         try:
-            os.remove(f'text-localization/{filename}')
+            dictionary = json.loads(df['imageAnnotations'][idx])
         except:
-            print(filename)
+            try:
+                os.remove(f'{FOLDER_NAME}/{filename}')
+            except:
+                print(f'{filename} has been removed')
 
-    final_annotations = []
-    final_class = []
-
-    for idx, entry in enumerate(dictionary):
-        vertex_list = []
-        clss_value = entry['selectedOptions'][1]['value']
-        vertices = entry['vertices']
-        for point in vertices:
-            vertex_list.append([point['x'], point['y']])
-        left, right = find_left_upper_right_down(vertex_list)
-        final_annotations.append([left[0], left[1], right[0], right[1]])
-        final_class.append(clss_value)
-    
-    print(final_class)
-    print(final_annotations)
-    break 
-
-
-    rlef_format = pointPath_To_WeirdAutoaiAnnotationFormat(final_annotations, final_class)
-    thread = threading.Thread(target = send_to_rlef, args =(f"text-localization/{filename}", "661d03fa20cc192af059e8d1","training-image", "training-set",rlef_format,))
-
-    ### CUSTOMIZE FROM HERE ###
-    # try:
-    #     if final_class[0] == final_class[1] == 'baylis':
-    #         # continue
-    #         rlef_format = pointPath_To_WeirdAutoaiAnnotationFormat(final_annotations, final_class)
-    #         thread = threading.Thread(target = send_to_rlef, args =(f"text-localization/{filename}", "661d03fa20cc192af059e8d1","training-image", "training-set",rlef_format,))
-    #         threads.append(thread)
-    #     else:
-    #         rm_index = None 
-    #         for idx,clss in enumerate(final_class):
-    #             if clss == 'baylis':
-    #                 rm_index = idx 
-
-    #         final_class.pop(rm_index)
-    #         final_annotations.pop(rm_index)
-    #         rlef_format = pointPath_To_WeirdAutoaiAnnotationFormat(final_annotations, final_class)
-    #         thread = threading.Thread(target = send_to_rlef, args =(f"text-localization/{filename}", "661d03fa20cc192af059e8d1","training-image", "training-set",rlef_format,))
-    #         threads.append(thread)
-    #     if len(threads) > 20:
-    #         for th in threads:
-    #             th.start()
-    #         for th in threads:
-    #             th.join()
-    #         threads = []
+        final_annotations = []
+        image = cv2.imread(f'{FOLDER_NAME}/{filename}')
+        height, width, _ = image.shape
+        final_class = []
+        
+        for idx, entry in enumerate(dictionary):
+            ### Read the image shape
+            # print(filename)
+        
             
+            vertex_list = []
+            clss_value = entry['selectedOptions'][1]['value']
+            vertices = entry['vertices']
+            for point in vertices:
+                vertex_list.append([point['x'], point['y']])
             
+            # left, right = find_left_upper_right_down(vertex_list)
+            # if class_map[clss_value] != 'delete':
+            final_annotations.append(vertex_list)
+            final_class.append("text")
 
-    # except Exception as e:
-    #     continue
 
+
+
+        # resized_image = cv2.resize(image, (640, 480), cv2.INTER_LINEAR)
+        
+        # resized_path = f'resized_images/{uuid.uuid1()}.png'
+        # cv2.imwrite(resized_path, resized_image)
+        # resized_annotations = resize_polygon_annotations((width, height), new_size, [vertex_list])
+
+
+        # final_class = ['object'] * len(vertex_list)
+        rlef_format = segmentation_annotation_rlef(final_annotations, final_class)
+        # send_to_rlef(resized_path, MODEL_ID ,"US-Data", "aug-14",rlef_format)
+        # send_to_rlef(filename, MODEL_ID ,tag,label,rlef_format)
+        # break
+        thread = threading.Thread(target = send_to_rlef, args =(filename, 
+                                                            MODEL_ID ,tag,label,rlef_format,))
+
+        
+        threads.append(thread)
+        
+        if len(threads) % MAX_THREAD ==0:
+            for th in threads:
+                th.start()
+            for th in threads:
+                th.join()
+            count  +=  len(threads)
+            print(f'STATUS : {count}/{len(df)}')
+            threads = []
+    except Exception as e:
+        print(e)
+        continue 
+        
     
-# if len(threads) > 0:
-#     for th in threads:
-#         th.start()
-#     for th in threads:
-#         th.join()
+    
+if len(threads) > 0:
+    for th in threads:
+        th.start()
+    for th in threads:
+        th.join()
+    threads = [] 
 
-#     threads = []
+print('DONE')

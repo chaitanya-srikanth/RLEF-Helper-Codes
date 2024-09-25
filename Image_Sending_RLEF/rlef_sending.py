@@ -122,7 +122,7 @@ if __name__ == '__main__':
     threads = []
 
     flag = False
-    # df = pd.read_csv('dataSetCollection_Sigma_Set_resources.csv')
+    df = pd.read_csv('dataSetCollection_UVA_Phase1to8_chainofcustody_resources.csv')
 
     for idx, img_path in enumerate(img_list):
         # print(img_path, label_path)
@@ -131,9 +131,8 @@ if __name__ == '__main__':
 
         ################ REMEMBER TO CHANGE THE MODEL ID ##################
         
-        model_id = '6685900f97eae5e91291d0f4'
-        tag = 'new-rack-india'
-        label = 'object'
+        model_id = '66e9745cf3f2ae88efae5d82'
+        
         img_count = 0
         
         threads.append(Thread(target = send_to_rlef, args = (img_path, model_id, tag, label )))
