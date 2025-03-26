@@ -5,3 +5,9 @@ Image_downloading/faceopen_key.json
 *.png
 .venv/*
 .venv 
+*.csv
+*.pth
+*.json 
+*.pth 
+faceopen_key.json
+.appmodconfig
